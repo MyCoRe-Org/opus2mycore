@@ -5,11 +5,30 @@
   <artifactId>opus2mycore</artifactId>
   <version>0.0.1-SNAPSHOT</version>
 
+  <name>OPUS to MyCoRe</name>
+
   <organization>
     <name>MyCoRe</name>
     <url>http://www.mycore.de</url>
   </organization>
   <inceptionYear>2017</inceptionYear>
+
+  <scm>
+    <url>https://github.com/MyCoRe-Org/opus2mycore</url>
+    <connection>scm:git:https://github.com/MyCoRe-Org/opus2mycore.git</connection>
+    <developerConnection>scm:git:https://github.com/MyCoRe-Org/opus2mycore.git</developerConnection>
+    <tag>master</tag>
+  </scm>
+
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/MyCoRe-Org/opus2mycore/issues</url>
+  </issueManagement>
+
+  <ciManagement>
+    <system>Travis-CI</system>
+    <url>https://travis-ci.org/MyCoRe-Org/opus2mycore</url>
+  </ciManagement>
 
   <properties>
     <log4j.version>2.8.2</log4j.version>
@@ -305,4 +324,5 @@
       <version>1.14</version>
     </dependency>
   </dependencies>
+
 </project>
