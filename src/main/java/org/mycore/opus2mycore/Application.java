@@ -82,22 +82,6 @@ public class Application {
         }
     }
 
-    /**
-     * @see
-     * Dissertation:
-     *  https://e-pub.uni-weimar.de/opus4/frontdoor/index/index/docId/3225
-     *  https://e-pub.uni-weimar.de/opus4/frontdoor/index/index/docId/3178
-     *  https://e-pub.uni-weimar.de/opus4/frontdoor/index/index/docId/3125
-     *  
-     * Bachelor/Master:
-     *  https://e-pub.uni-weimar.de/opus4/frontdoor/index/index/docId/2613
-     *  https://e-pub.uni-weimar.de/opus4/frontdoor/index/index/docId/2743
-     *  
-     * Schriftenreihen:
-     *  https://e-pub.uni-weimar.de/opus4/frontdoor/index/index/docId/2699
-     *  https://e-pub.uni-weimar.de/opus4/frontdoor/index/index/docId/2357
-     * @throws Exception
-     */
     private void run() throws Exception {
         Path outputPath = Paths.get(outputDir);
         if (!Files.exists(outputPath)) {
