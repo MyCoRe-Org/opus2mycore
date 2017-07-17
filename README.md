@@ -1,4 +1,4 @@
-# OPUS to MyCoRe [![Build Status](https://travis-ci.org/MyCoRe-Org/opus2mycore.svg?branch=master)](https://travis-ci.org/MyCoRe-Org/opus2mycore)
+# OPUS to MyCoRe [![Build Status](https://travis-ci.org/MyCoRe-Org/opus2mycore.svg?branch=master)](https://travis-ci.org/MyCoRe-Org/opus2mycore) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/39b52bf6dd0c4130a7e003ffee4336bf)](https://www.codacy.com/app/MyCoRe/opus2mycore?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=MyCoRe-Org/opus2mycore&amp;utm_campaign=Badge_Grade)
 
  Use this project to extract OPUS records from OAI 2.0 to MyCoRe compatible MODS-Format.
  
