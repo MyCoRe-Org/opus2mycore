@@ -57,6 +57,9 @@ public class Application {
     @Parameter(names = { "-o", "--output_dir" }, description = "The output directory.")
     private String outputDir = System.getProperty("java.io.tmpdir");
 
+    @Parameter(names = { "-s", "--setSpec" }, description = "The OAI metadata set.")
+    private String setSpec;
+
     @Parameter(names = { "--stylesheet" }, description = "Path to custom XSL-Stylesheet for transformation.")
     private String stylesheet;
 
@@ -107,7 +110,7 @@ public class Application {
 
         try {
             XMLOutputter xmlout = new XMLOutputter(Format.getPrettyFormat());
-            RecordTransformer recordTransformer = new RecordTransformer(baseURL, format);
+            RecordTransformer recordTransformer = new RecordTransformer(baseURL, format, setSpec);
 
             recordTransformer.transformAll(stylesheet).stream()
                 .filter(record -> record != null)

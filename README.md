@@ -28,6 +28,10 @@ java -jar opus2mycore.jar --help
   *Default:* `mir`<br />
   
   The MyCoRe procject id. (used for command.txt)
+
+* **-s, --setSpec**<br />
+
+  The OAI metadata set spec.
   
 * **--stylesheet**<br />
   

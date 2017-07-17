@@ -76,6 +76,8 @@ public class RecordTransformer {
 
     private String format;
 
+    private String setSpec;
+
     private Harvester harvester;
 
     private Function<String, String> formatFunc = (format) -> {
@@ -89,11 +91,16 @@ public class RecordTransformer {
     };
 
     public RecordTransformer(String baseURL) {
-        this(baseURL, null);
+        this(baseURL, null, null);
     }
 
     public RecordTransformer(String baseURL, String format) {
+        this(baseURL, format, null);
+    }
+
+    public RecordTransformer(String baseURL, String format, String setSpec) {
         this.baseURL = baseURL;
+        this.setSpec = setSpec;
         harvester = HarvesterBuilder.createNewInstance(this.baseURL);
         this.format = formatFunc.apply(format);
     }
@@ -150,7 +157,7 @@ public class RecordTransformer {
         NoSetHierarchyException, HarvestException, BadResumptionTokenException {
 
         List<OAIRecord> records = new ArrayList<>();
-        OAIDataList<Header> recordList = harvester.listIdentifiers(format, null, null, null);
+        OAIDataList<Header> recordList = harvester.listIdentifiers(format, null, null, setSpec);
 
         records.addAll(processRecords(recordList, stylesheet));
 
