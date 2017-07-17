@@ -11,6 +11,7 @@
   <xsl:param name="allowFreeSubject" select="false()" />
 
   <xsl:variable name="rfc4646" select="document('http://www.mycore.org/classifications/rfc4646.xml')/mycoreclass" />
+  <xsl:variable name="sdnb" select="document('http://www.mycore.org/classifications/sdnb.xml')/mycoreclass" />
   <xsl:variable name="mir_genres" select="document('http://www.mycore.org/classifications/mir_genres.xml')/mycoreclass" />
   <xsl:variable name="mir_licenses" select="document('http://www.mycore.org/classifications/mir_licenses.xml')/mycoreclass" />
 
@@ -143,9 +144,19 @@
   </xsl:template>
 
   <xsl:template match="dc:subject[@xsi:type='xMetaDiss:DDC-SG']">
-    <classification displayLabel="sdnb" authority="sdnb">
-      <xsl:value-of select="." />
-    </classification>
+    <xsl:variable name="value" select="." />
+    <xsl:choose>
+      <xsl:when test="$sdnb//category[@ID=$value]">
+        <classification displayLabel="sdnb" authority="sdnb">
+          <xsl:value-of select="." />
+        </classification>
+      </xsl:when>
+      <xsl:otherwise>
+        <classification authority="ddc">
+          <xsl:value-of select="." />
+        </classification>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="dc:subject[@xsi:type='xMetaDiss:SWD']">
