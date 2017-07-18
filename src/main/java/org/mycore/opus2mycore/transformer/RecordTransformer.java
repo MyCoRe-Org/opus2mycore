@@ -24,13 +24,13 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
@@ -52,11 +52,11 @@ import org.mycore.oai.pmh.Header;
 import org.mycore.oai.pmh.IdDoesNotExistException;
 import org.mycore.oai.pmh.NoRecordsMatchException;
 import org.mycore.oai.pmh.NoSetHierarchyException;
-import org.mycore.oai.pmh.OAIDataList;
 import org.mycore.oai.pmh.Record;
 import org.mycore.oai.pmh.harvester.HarvestException;
 import org.mycore.oai.pmh.harvester.Harvester;
 import org.mycore.oai.pmh.harvester.HarvesterBuilder;
+import org.mycore.oai.pmh.harvester.HarvesterUtil;
 import org.mycore.opus2mycore.entity.OAIFileContainer;
 import org.mycore.opus2mycore.entity.OAIRecord;
 
@@ -156,18 +156,7 @@ public class RecordTransformer {
         throws BadArgumentException, CannotDisseminateFormatException, NoRecordsMatchException,
         NoSetHierarchyException, HarvestException, BadResumptionTokenException {
 
-        List<OAIRecord> records = new ArrayList<>();
-        OAIDataList<Header> recordList = harvester.listIdentifiers(format, null, null, setSpec);
-
-        records.addAll(processRecords(recordList, stylesheet));
-
-        while (recordList.isResumptionTokenSet()) {
-            LOGGER.info("Load next records with resumption token {}", recordList.getResumptionToken());
-            recordList = harvester.listIdentifiers(recordList.getResumptionToken().getToken());
-            records.addAll(processRecords(recordList, stylesheet));
-        }
-
-        return records;
+        return processRecords(HarvesterUtil.streamHeaders(harvester, format, null, null, setSpec), stylesheet);
     }
 
     private JDOMResult transform(Element xml, String stylesheet, Map<String, Object> params)
@@ -189,8 +178,8 @@ public class RecordTransformer {
         return result;
     }
 
-    private List<OAIRecord> processRecords(OAIDataList<Header> recordList, String stylesheet) {
-        return recordList.parallelStream().map(h -> {
+    private List<OAIRecord> processRecords(Stream<Header> recordStream, String stylesheet) {
+        return recordStream.parallel().map(h -> {
             try {
                 return this.transform(h.getId(), stylesheet);
             } catch (BadArgumentException | CannotDisseminateFormatException | NoRecordsMatchException
