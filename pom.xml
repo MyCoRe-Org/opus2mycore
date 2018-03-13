@@ -31,7 +31,7 @@
   </ciManagement>
 
   <properties>
-    <log4j.version>2.8.2</log4j.version>
+    <log4j.version>2.10.0</log4j.version>
     <oaipmh.version>0.9-SNAPSHOT</oaipmh.version>
     <encoding>UTF-8</encoding>
     <java.version>1.8</java.version>
@@ -246,36 +246,6 @@
     </pluginManagement>
   </build>
 
-  <repositories>
-    <repository>
-      <id>MyCoRe HQ</id>
-      <url>http://artifactory.mycore.de/mycore-releases</url>
-      <snapshots>
-        <enabled>false</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>MyCoRe HQ Snapshots</id>
-      <url>http://artifactory.mycore.de/mycore-snapshots</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-    <repository>
-      <id>MyCoRe HQ Libs Snapshots</id>
-      <url>http://artifactory.mycore.de/libs-snapshots-local</url>
-      <releases>
-        <enabled>false</enabled>
-      </releases>
-      <snapshots>
-        <enabled>true</enabled>
-      </snapshots>
-    </repository>
-  </repositories>
-
   <dependencies>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -321,7 +291,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.14</version>
+      <version>1.16</version>
     </dependency>
   </dependencies>
 
