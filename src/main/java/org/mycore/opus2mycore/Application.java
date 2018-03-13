@@ -54,6 +54,10 @@ public class Application {
     @Parameter(names = { "-f", "--format" }, description = "The OAI metadata format.")
     private String format = "xMetaDissPlus";
 
+    @Parameter(names = { "-sfc", "--skipFormatCheck" },
+        description = "Skips the check if OAI metadata format is listed.")
+    private boolean skipFormatCheck = false;
+
     @Parameter(names = { "-o", "--output_dir" }, description = "The output directory.")
     private String outputDir = System.getProperty("java.io.tmpdir");
 
@@ -94,7 +98,7 @@ public class Application {
 
         try {
             XMLOutputter xmlout = new XMLOutputter(Format.getPrettyFormat());
-            RecordTransformer recordTransformer = new RecordTransformer(baseURL, format, setSpec);
+            RecordTransformer recordTransformer = new RecordTransformer(baseURL, format, setSpec, skipFormatCheck);
 
             recordTransformer.transformAll(stylesheet).stream()
                 .filter(record -> record != null)

@@ -15,7 +15,12 @@ java -jar opus2mycore.jar --help
   *Default:* `xMetaDissPlus`<br />
   
   The OAI metadata format.
+
+* **-sfc, --skipFormatCheck**<br />
+  *Default:* `false`<br />
   
+  Skips the check if OAI metadata format is listed.
+    
 * **-h, --help**<br />
 
   Print help (this message) and exit

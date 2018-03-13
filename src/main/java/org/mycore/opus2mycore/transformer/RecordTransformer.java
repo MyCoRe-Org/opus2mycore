@@ -91,7 +91,7 @@ public class RecordTransformer {
     };
 
     public RecordTransformer(String baseURL) {
-        this(baseURL, null, null);
+        this(baseURL, null);
     }
 
     public RecordTransformer(String baseURL, String format) {
@@ -99,10 +99,14 @@ public class RecordTransformer {
     }
 
     public RecordTransformer(String baseURL, String format, String setSpec) {
+        this(baseURL, format, setSpec, true);
+    }
+
+    public RecordTransformer(String baseURL, String format, String setSpec, boolean skipFormatCheck) {
         this.baseURL = baseURL;
         this.setSpec = setSpec;
         harvester = HarvesterBuilder.createNewInstance(this.baseURL);
-        this.format = formatFunc.apply(format);
+        this.format = !skipFormatCheck ? formatFunc.apply(format) : format;
     }
 
     public OAIRecord transform(String id) throws BadArgumentException, CannotDisseminateFormatException,
