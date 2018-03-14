@@ -31,6 +31,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
@@ -52,23 +53,33 @@ public class OAIFileContainer {
 
     private URL url;
 
-    public static OAIFileContainer parse(Record record, String format) throws MalformedURLException {
+    public static OAIFileContainer parse(Record record) throws MalformedURLException {
         OAIFileContainer cont = null;
         Element metadata = record.getMetadata().toXML();
 
-        if ("xmetadiss".equalsIgnoreCase(format) || "xmetadissplus".equalsIgnoreCase(format)) {
-            Namespace ns = Namespace.getNamespace("http://www.d-nb.de/standards/ddb/");
+        Namespace ns = Namespace.getNamespace("http://www.d-nb.de/standards/ddb/");
 
+        Optional<List<OAIFile>> files = Optional.ofNullable(metadata
+            .getChildren("fileProperties", ns)).filter(c -> !c.isEmpty()).map(c -> c.stream().map(fp -> {
+                OAIFile file = new OAIFile();
+                file.setName(fp.getAttributeValue("fileName", ns));
+                file.setSize(Long.parseLong(fp.getAttributeValue("fileSize", ns)));
+                return file;
+            }).collect(Collectors.toList()));
+
+        Optional<URL> transferURL = Optional.ofNullable(metadata.getChildText("transfer", ns)).map(t -> {
+            try {
+                return new URL(t);
+            } catch (MalformedURLException e) {
+                LOGGER.warn(e.getMessage(), e);
+                return null;
+            }
+        }).filter(u -> u != null);
+
+        if (files.isPresent() || transferURL.isPresent()) {
             cont = new OAIFileContainer();
-            cont.setFiles(
-                metadata
-                    .getChildren("fileProperties", ns).stream().map(fp -> {
-                        OAIFile file = new OAIFile();
-                        file.setName(fp.getAttributeValue("fileName", ns));
-                        file.setSize(Long.parseLong(fp.getAttributeValue("fileSize", ns)));
-                        return file;
-                    }).collect(Collectors.toList()));
-            cont.setUrl(new URL(metadata.getChildText("transfer", ns)));
+            files.ifPresent(cont::setFiles);
+            transferURL.ifPresent(cont::setUrl);
         }
 
         return cont;

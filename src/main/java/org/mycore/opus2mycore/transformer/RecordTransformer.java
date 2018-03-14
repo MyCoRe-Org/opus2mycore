@@ -140,7 +140,7 @@ public class RecordTransformer {
 
             OAIRecord record = new OAIRecord(r);
             record.setDocument(result.getDocument());
-            record.setContainer(OAIFileContainer.parse(r, format));
+            record.setContainer(OAIFileContainer.parse(r));
 
             return record;
         } catch (TransformerException | IOException e) {
