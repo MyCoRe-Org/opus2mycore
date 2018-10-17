@@ -86,7 +86,7 @@ public class OAIFileContainer {
     }
 
     public void download(Path outputDir) throws IOException {
-        if (!files.isEmpty()) {
+        if (files != null && !files.isEmpty()) {
             ReadableByteChannel rbc = null;
             try {
                 rbc = Channels.newChannel(url.openStream());
