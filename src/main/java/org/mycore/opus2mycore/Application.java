@@ -116,9 +116,13 @@ public class Application {
                         LOGGER.info("Save transformed record to {}.", recordTransFile);
                         xmlout.output(record.getDocument(), new FileOutputStream(recordTransFile.toFile()));
 
-                        LOGGER.info("Start download of files...");
-                        record.getContainer().download(filesPath);
-                        LOGGER.info("download done.");
+                        if (record.getContainer() != null) {
+                            LOGGER.info("Start download of files...");
+                            record.getContainer().download(filesPath);
+                            LOGGER.info("download done.");
+                        } else {
+                            LOGGER.warn("Record {} has no files!", record.getRecord().getHeader().getId());
+                        }
 
                         fos.write(String.format(Locale.ROOT,
                             "load mods document from file %s with files from directory %s for project %s\n",
