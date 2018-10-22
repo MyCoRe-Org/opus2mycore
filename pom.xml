@@ -31,7 +31,7 @@
   </ciManagement>
 
   <properties>
-    <log4j.version>2.10.0</log4j.version>
+    <log4j.version>2.11.1</log4j.version>
     <oaipmh.version>0.9-SNAPSHOT</oaipmh.version>
     <encoding>UTF-8</encoding>
     <java.version>1.8</java.version>
@@ -291,7 +291,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-compress</artifactId>
-      <version>1.16</version>
+      <version>1.18</version>
     </dependency>
   </dependencies>
 
