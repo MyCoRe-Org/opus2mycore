@@ -108,12 +108,16 @@ public class OAIFileContainer {
                     if (files.size() == 1) {
                         saveFile(tmpFile, outputDir, files.get(0));
                     } else {
-                        if (ArchiveUtils.isTar(tmpFile)) {
-                            checkExtractedFiles(ArchiveUtils.extractTar(tmpFile, outputDir));
-                        } else if (ArchiveUtils.isZip(tmpFile)) {
-                            checkExtractedFiles(ArchiveUtils.extractZip(tmpFile, outputDir));
-                        } else {
-                            LOGGER.warn("Unknown archive.");
+                        try {
+                            if (ArchiveUtils.isTar(tmpFile)) {
+                                checkExtractedFiles(ArchiveUtils.extractTar(tmpFile, outputDir));
+                            } else if (ArchiveUtils.isZip(tmpFile)) {
+                                checkExtractedFiles(ArchiveUtils.extractZip(tmpFile, outputDir));
+                            } else {
+                                LOGGER.warn("Unknown archive.");
+                            }
+                        } catch (IOException ioe) {
+                            LOGGER.error(ioe.getMessage(), ioe);
                         }
                     }
                 } finally {
