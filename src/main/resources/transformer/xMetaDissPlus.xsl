@@ -10,7 +10,7 @@
 
   <xsl:param name="allowFreeSubject" select="false()" />
 
-  <xsl:variable name="rfc4646" select="document('http://www.mycore.org/classifications/rfc4646.xml')/mycoreclass" />
+  <xsl:variable name="rfc5646" select="document('http://www.mycore.org/classifications/rfc5646.xml')/mycoreclass" />
   <xsl:variable name="sdnb" select="document('http://www.mycore.org/classifications/sdnb.xml')/mycoreclass" />
   <xsl:variable name="mir_genres" select="document('http://www.mycore.org/classifications/mir_genres.xml')/mycoreclass" />
   <xsl:variable name="mir_licenses" select="document('http://www.mycore.org/classifications/mir_licenses.xml')/mycoreclass" />
@@ -32,7 +32,7 @@
 
   <xsl:template match="dc:language[@xsi:type='dcterms:ISO639-2']">
     <language>
-      <languageTerm authority="rfc4646" type="code">
+      <languageTerm authority="rfc5646" type="code">
         <xsl:call-template name="langCode">
           <xsl:with-param name="code" select="." />
         </xsl:call-template>
@@ -58,24 +58,42 @@
     </titleInfo>
   </xsl:template>
 
+  <xsl:template name="person">
+    <xsl:param name="role" select="'aut'" />
+
+    <name type="personal" xlink:type="simple">
+      <displayForm>
+        <xsl:value-of select="pc:surName" />
+        <xsl:text>, </xsl:text>
+        <xsl:value-of select="pc:foreName" />
+      </displayForm>
+      <role>
+        <roleTerm authority="marcrelator" type="code">
+          <xsl:value-of select="$role" />
+        </roleTerm>
+      </role>
+      <namePart type="family">
+        <xsl:value-of select="pc:surName" />
+      </namePart>
+      <namePart type="given">
+        <xsl:value-of select="pc:foreName" />
+      </namePart>
+      <xsl:for-each select="../pc:gnd|../pc:orcid">
+        <xsl:variable name="type">
+          <xsl:value-of select="local-name(.)" />
+        </xsl:variable>
+
+        <nameIdentifier>
+          <xsl:attribute name="type"><xsl:value-of select="$type" /></xsl:attribute>
+          <xsl:value-of select="." />
+        </nameIdentifier>
+      </xsl:for-each>
+    </name>
+  </xsl:template>
+
   <xsl:template match="dc:creator">
     <xsl:for-each select="pc:person/pc:name[@type='nameUsedByThePerson']">
-      <name type="personal" xlink:type="simple">
-        <displayForm>
-          <xsl:value-of select="pc:surName" />
-          <xsl:text>, </xsl:text>
-          <xsl:value-of select="pc:foreName" />
-        </displayForm>
-        <role>
-          <roleTerm authority="marcrelator" type="code">aut</roleTerm>
-        </role>
-        <namePart type="family">
-          <xsl:value-of select="pc:surName" />
-        </namePart>
-        <namePart type="given">
-          <xsl:value-of select="pc:foreName" />
-        </namePart>
-      </name>
+      <xsl:call-template name="person" />
     </xsl:for-each>
   </xsl:template>
 
@@ -98,41 +116,37 @@
     </xsl:variable>
 
     <xsl:for-each select="pc:person/pc:name[@type='nameUsedByThePerson']">
-      <name type="personal" xlink:type="simple">
-        <displayForm>
-          <xsl:value-of select="pc:surName" />
-          <xsl:text>, </xsl:text>
-          <xsl:value-of select="pc:foreName" />
-        </displayForm>
-        <role>
-          <roleTerm authority="marcrelator" type="code">
-            <xsl:value-of select="$role" />
-          </roleTerm>
-        </role>
-        <namePart type="family">
-          <xsl:value-of select="pc:surName" />
-        </namePart>
-        <namePart type="given">
-          <xsl:value-of select="pc:foreName" />
-        </namePart>
-      </name>
+      <xsl:call-template name="person">
+        <xsl:with-param name="role" select="$role" />
+      </xsl:call-template>
     </xsl:for-each>
   </xsl:template>
 
   <xsl:template match="dc:publisher">
     <xsl:for-each select="cc:universityOrInstitution">
+      <xsl:variable name="namePrefix">
+        <xsl:if test="../@ddb:role and not(contains(cc:name, ../@ddb:role))">
+          <xsl:value-of select="concat(../@ddb:role, ' / ')" />
+        </xsl:if>
+      </xsl:variable>
+
       <name type="corporate" xlink:type="simple">
         <xsl:for-each select="cc:name[string-length(text()) &gt; 0]">
           <displayForm>
-            <xsl:value-of select="." />
+            <xsl:value-of select="concat($namePrefix, .)" />
           </displayForm>
           <namePart>
-            <xsl:value-of select="." />
+            <xsl:value-of select="concat($namePrefix, .)" />
           </namePart>
         </xsl:for-each>
         <role>
           <roleTerm type="code" authority="marcrelator">edt</roleTerm>
         </role>
+        <xsl:if test="@cc:GND-Nr">
+          <nameIdentifier type="gnd">
+            <xsl:value-of select="@cc:GND-Nr"></xsl:value-of>
+          </nameIdentifier>
+        </xsl:if>
       </name>
     </xsl:for-each>
   </xsl:template>
@@ -356,7 +370,7 @@
   <xsl:template name="langCode">
     <xsl:param name="code" select="'ger'" />
 
-    <xsl:value-of select="$rfc4646//label[@xml:lang='x-bibl' and @text=$code]/../@ID" />
+    <xsl:value-of select="$rfc5646//label[@xml:lang='x-bibl' and @text=$code]/../@ID" />
   </xsl:template>
 
   <xsl:template name="diniPublType2genre">
