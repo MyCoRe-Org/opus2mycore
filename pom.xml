@@ -31,7 +31,7 @@
   </ciManagement>
 
   <properties>
-    <log4j.version>2.16.0</log4j.version>
+    <log4j.version>2.17.0</log4j.version>
     <oaipmh.version>0.9-SNAPSHOT</oaipmh.version>
     <encoding>UTF-8</encoding>
     <java.version>1.8</java.version>
